@@ -78,8 +78,11 @@ with col2:
     fig_bar = px.barh(
         x=kategori_omset.values,
         y=kategori_omset.index,
-        title="Rata-rata Omset per Kategori (Miliar Rp)",
-        labels={'x': 'Omset (Miliar Rp)', 'y': 'Kategori'}
+        title="Rata-rata Omset per Kategori"
+    )
+    fig_bar.update_layout(
+        xaxis_title="Omset (Miliar Rp)",
+        yaxis_title="Kategori"
     )
     st.plotly_chart(fig_bar, use_container_width=True)
 
@@ -108,6 +111,4 @@ st.dataframe(df_filtered[display_cols].sort_values('Total_Omset_12Bulan', ascend
 
 # FOOTER
 st.markdown("---")
-
 st.markdown("*Dashboard dibuat dengan Streamlit | Data dari analisis PySpark MLlib*")
-
