@@ -77,22 +77,29 @@ with col1:
     if 'Segmentasi' in df.columns:
         segmentasi_counts = df_filtered['Segmentasi'].value_counts()
         fig_pie = px.pie(
-            values=segmentasi_counts.values,
-            names=segmentasi_counts.index,
-            title="WP per Segmentasi"
-        )
-        st.plotly_chart(fig_pie, use_container_width=True)
-
 with col2:
     st.subheader("Rata-rata Omset per Kategori")
     if 'Kategori' in df.columns and 'Total_Omset_12Bulan' in df.columns:
-        kategori_omset = df_filtered.groupby('Kategori')['Total_Omset_12Bulan'].mean().sort_values(ascending=True) / 1e9
-        fig_bar = px.barh(
-            x=kategori_omset.values,
-            y=kategori_omset.index,
-            title="Rata-rata Omset per Kategori"
-        )
-        fig_bar.update_layout(
+        try:
+            kategori_data = df_filtered.groupby('Kategori')['Total_Omset_12Bulan'].mean().reset_index()
+            kategori_data.columns = ['Kategori', 'Omset_Rata']
+            kategori_data['Omset_Miliar'] = kategori_data['Omset_Rata'] / 1e9
+            kategori_data = kategori_data.sort_values('Omset_Miliar', ascending=True)
+            
+            fig_bar = px.barh(
+                data_frame=kategori_data,
+                x='Omset_Miliar',
+                y='Kategori',
+                title="Rata-rata Omset per Kategori"
+            )
+            fig_bar.update_xaxes(title_text="Omset (Miliar Rp)")
+            fig_bar.update_yaxes(title_text="Kategori")
+            st.plotly_chart(fig_bar, use_container_width=True)
+        except Exception as e:
+            st.error(f"Error di chart: {str(e)}")
+    else:
+        st.warning("Kolom Kategori atau Total_Omset_12Bulan tidak ditemukan")
+
             xaxis_title="Omset (Miliar Rp)",
             yaxis_title="Kategori"
         )
@@ -121,3 +128,4 @@ if display_cols and 'Total_Omset_12Bulan' in df.columns:
 
 st.markdown("---")
 st.markdown("*Dasbor dibuat dengan Streamlit | Data dari analisis PySpark MLlib*")
+
