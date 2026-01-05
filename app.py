@@ -9,7 +9,7 @@ st.title("Dashboard Analisis Pajak Restoran Tasikmalaya")
 st.markdown("Data: Oktober 2025 | Analisis dengan PySpark MLlib")
 
 # Load Data dari GitHub Raw URL
-github_url = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/dashboard_pajak_data.csv"
+github_url = "https://raw.githubusercontent.com/hadiswara/pajak-restoran-dashboard/main/dashboard_pajak_data.csv"
 
 try:
     df = pd.read_csv(github_url)
@@ -107,4 +107,5 @@ st.dataframe(df_filtered[display_cols].sort_values('Total_Omset_12Bulan', ascend
 
 # FOOTER
 st.markdown("---")
+
 st.markdown("*Dashboard dibuat dengan Streamlit | Data dari analisis PySpark MLlib*")
